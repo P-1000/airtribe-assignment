@@ -16,15 +16,14 @@ CREATE TABLE Courses (
     start_date DATE NOT NULL,
     FOREIGN KEY (instructor_id) REFERENCES Instructors(instructor_id)
 );
-
 CREATE TABLE Leads (
-    lead_id SERIAL PRIMARY KEY ,
+    lead_id SERIAL PRIMARY KEY,
     course_id INT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     linkedin_profile VARCHAR(255),
-    status ENUM('Pending', 'Accepted', 'Rejected', 'Waitlisted') DEFAULT 'Pending',
+    status VARCHAR(10) CHECK (status IN ('Pending', 'Accepted', 'Rejected')) DEFAULT 'Pending',
     FOREIGN KEY (course_id) REFERENCES Courses(course_id)
 );
 

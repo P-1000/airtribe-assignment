@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import instructorRouter from "./src/routes/instructorRoutes.js";
 import courseRouter from "./src/routes/courseRoutes.js";
+import leadRouter from "./src/routes/leadRoutes.js";
 import { client } from "./config/db.js";
 
 dotenv.config();
@@ -12,6 +13,7 @@ app.use(express.json());
 //routes :
 app.use("/instructors", instructorRouter);
 app.use("/courses", courseRouter);
+app.use('/leads', leadRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello World" });
