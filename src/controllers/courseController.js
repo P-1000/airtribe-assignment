@@ -126,3 +126,23 @@ export const deleteCourse = async (req, res, next) => {
     return next(createError(500, "Internal server error"));
   }
 };
+
+export const getCourseDetails = async (req, res, next) => {
+  const { course_id } = req.body;
+  const query = `
+  SELECT 
+  Courses.* , 
+  Instructors.name AS instructor_name 
+  FROM 
+  Courses INNER JOIN Instructors 
+  ON Courses.instructor_id = Instructors.instructor_id 
+  where Courses.course_id = $1;
+  `;
+  const values = [course_id];
+  try {
+    const result = await client.query(query, values);
+    res.status(200).json({ data: result.rows });
+  } catch (error) {
+    next(createError(500, "Internal server error"));
+  }
+};

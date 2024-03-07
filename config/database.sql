@@ -35,3 +35,13 @@ CREATE TABLE LeadComments (
     FOREIGN KEY (lead_id) REFERENCES Leads(lead_id),
     FOREIGN KEY (instructor_id) REFERENCES Instructors(instructor_id)
 );
+
+
+CREATE TABLE LeadCounts (
+    id SERIAL PRIMARY KEY,
+    course_id INT,
+    pending_count INT DEFAULT 0,
+    accepted_count INT DEFAULT 0,
+    rejected_count INT DEFAULT 0,
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+);

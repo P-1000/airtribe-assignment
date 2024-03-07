@@ -16,7 +16,7 @@ app.use("/courses", courseRouter);
 app.use('/leads', leadRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello World" });
+  res.status(200).json({ message: "Airtribe running on port : " + process.env.PORT });
 });
 
 app.listen(process.env.PORT, () => {
