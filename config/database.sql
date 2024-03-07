@@ -28,7 +28,7 @@ CREATE TABLE Leads (
 );
 
 CREATE TABLE LeadComments (
-    comment_id INT PRIMARY KEY AUTO_INCREMENT,
+    comment_id SERIAL PRIMARY KEY ,
     lead_id INT,
     instructor_id INT,
     comment TEXT,
