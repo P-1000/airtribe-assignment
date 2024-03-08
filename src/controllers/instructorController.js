@@ -7,11 +7,11 @@ const instructorRouter = express.Router();
 export const newInstructor = async (req, res, next) => {
   const { name, email, bio } = req.body;
   if (name === undefined || email === undefined || bio === undefined) {
-    res.status(400).json({ message: "Invalid input" });
+    return next(createError(400, "Invalid input"));
   }
 
   if (name === "" || email === "" || bio === "") {
-    res.status(400).json({ message: "Invalid input" });
+    return next(createError(400, "Invalid input"));
   }
 
   const emailRegex = /\S+@\S+\.\S+/;
@@ -23,7 +23,7 @@ export const newInstructor = async (req, res, next) => {
   const result = await client.query(query, values);
 
   if (result.rows.length > 0) {
-    return res.status(400).json({ message: "Instructor already exists" });
+    return next(createError(409, "Instructor already exists"));
   }
 
   try {
@@ -40,7 +40,7 @@ export const updateInstructor = async (req, res, next) => {
   const { id } = req.params;
   const { name, email, bio } = req.body;
 
-  if(id == undefined && id == "") return next(createError(400, "Invalid input"));
+  if(id == undefined || id == "") return next(createError(400, "Invalid input"));
 
   const query = `SELECT 1 FROM Instructors WHERE instructor_id = $1 LIMIT 1`;
   const values = [id];
@@ -84,7 +84,8 @@ export const getAllInstructors = async (req, res, next) => {
 export const getInstructorById = async (req, res, next) => {
     try {
         const {id} = req.params;
-        if(id == undefined && id == "") return next(createError(400, "Invalid input"));
+        if(id == undefined || id == "") return next(createError(400, "Invalid input"));
+
         const query = `SELECT * FROM Instructors WHERE instructor_id = $1;`;
         const values = [id];
         const result = await client.query(query, values);
@@ -106,7 +107,7 @@ export const deleteInstructor = async (req, res, next) => {
       const checkResult = await client.query(checkQuery, [id]);
 
       if (checkResult.rows.length === 0) {
-          return res.status(404).json({ message: "Instructor not found" });
+          return next(createError(404, "Instructor not found"));
       }
 
       const deleteQuery = `DELETE FROM Instructors WHERE instructor_id = $1;`;

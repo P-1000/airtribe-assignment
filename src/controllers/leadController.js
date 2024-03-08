@@ -5,7 +5,7 @@ export const applyForCourse = async (req, res, next) => {
   const { course_id } = req.params;
   const { name, email, phone, linkedin_profile } = req.body;
   if (!course_id) {
-    res.status(400).json({ error: "Invalid input" });
+    return next(createError(400, "Invalid input"));
   }
   if (!name || !email || !phone || !linkedin_profile) {
     return next(createError(400, "Invalid input"));
@@ -25,9 +25,7 @@ export const applyForCourse = async (req, res, next) => {
     const checkQuery = `SELECT * FROM leads WHERE email = $1 AND course_id = $2;`;
     const checkres = await client.query(checkQuery, [email, course_id]);
     if (checkres.rows.length > 0) {
-      res
-        .status(400)
-        .json({ message: "You have already applied for this course" });
+      return next(createError(400, "Lead already exists"));
     }
   } catch (error) {
     next(createError(500, "Internal server error"));

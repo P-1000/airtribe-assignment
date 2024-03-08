@@ -4,36 +4,38 @@ import { createError } from "../../config/error.js";
 
 import { client } from "../../config/db.js";
 
-// export const getAllCourses = async (req, res, next) => {
-//   const query = `SELECT * FROM Courses;`;
-//   try {
-//     const result = await client.query(query);
-//     res.status(200).json({ data: result.rows });
-//   } catch (error) {
-//     next(createError(500, "Something went wrong"));
-//   }
-// };
-
-
-//test error handling
 export const getAllCourses = async (req, res, next) => {
-  next(createError(500, "Something went wrong"));
+  const query = `SELECT * FROM Courses;`;
+  try {
+    const result = await client.query(query);
+    res.status(200).json({ data: result.rows });
+  } catch (error) {
+    next(createError(500, "Something went wrong"));
+  }
 };
 
 export const getCoursesByName = async (req, res, next) => {
   const { name } = req.body;
+  if (!name) {
+    return next(createError(400, "Name is required"));
+  }
   const query = `SELECT * FROM Courses WHERE similarity(name , $1) > 0.3;`;
   try {
     const fet = await client.query(query, [name]);
     res.status(200).json({ data: fet.rows });
   } catch (error) {
-    next(createError(500, "Internal server error"));
+    next(createError(500, "Something went wrong"));
   }
 };
 
 export const createCourse = async (req, res, next) => {
   const { name, course_description, max_seats, start_date, instructor_id } =
     req.body;
+
+  if (!name || !course_description || !max_seats || !start_date || !instructor_id) {
+    return next(createError(400, "All fields are required"));
+  }
+
 
   const checkQuery = `SELECT * FROM Instructors WHERE instructor_id = $1;`;
   const checkValues = [instructor_id];
@@ -161,6 +163,9 @@ export const deleteCourse = async (req, res, next) => {
 
 export const getCourseDetails = async (req, res, next) => {
   const { course_id } = req.body;
+
+  if (!course_id)  return next(createError(400, "Course ID is required"));
+
   const query = `
   SELECT 
   Courses.* , 
