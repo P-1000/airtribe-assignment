@@ -1,10 +1,16 @@
 # Airtribe Backend API
 
-This repository contains the backend API for Airtribe, an application for managing online courses. The API is built using Node.js and PostgreSQL, and it provides endpoints for managing courses, instructors, leads, and more.
+The backend API for Airtribe, an application for managing online courses. The API is built using Node.js , Express js and PostgreSQL, and it provides endpoints for managing courses, instructors, leads, and more.
 
 ## Postman Documentation
 
 Explore the API endpoints and test them using Postman. Access the documentation [here](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).
+
+You can direclty fork the collection from the link and start using the API In postman app or directly from the browser.
+
+No need to enter the endpoints manually and test them.
+
+You can also find the Documentation of each api with the request , response , schema of the response ,example of the response and you can also test the api from the documentation itself.
 
 ## Database Schema
 
@@ -63,4 +69,4 @@ already set in the docker-compose.yml file and the .env file so no need to set t
 
 The API will be accessible at `http://localhost:13000`.
 
-For a complete list of endpoints and their usage, visit the documentation endpoint mentioned in the Postman documentation section. [here] (https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ)
+For a complete list of endpoints and their usage, visit the documentation endpoint mentioned in the Postman documentation section. [click here for api docs and testing](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).

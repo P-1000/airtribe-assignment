@@ -13,6 +13,7 @@ CREATE TABLE Courses (
     instructor_id INT,
     name VARCHAR(255) NOT NULL,
     max_seats INT NOT NULL,
+    course_description TEXT,
     start_date DATE NOT NULL,
     FOREIGN KEY (instructor_id) REFERENCES Instructors(instructor_id)
 );

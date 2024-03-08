@@ -1,0 +1,21 @@
+version: '2.23'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: airtribe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  app:
+    image: app-airtribe
+    restart: always
+    ports:
+      - "13000:3000"
+    environment:
+      DB_USER: postgres
+      DBNAME: airtribe
+      DBPASS: postgres
+      DBHOST: db
+      DBPORT: 5432

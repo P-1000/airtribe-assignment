@@ -4,6 +4,7 @@ dotenv.config();
 
 const { Client } = pg;
 
+
 export const client = new Client({
   user: process.env.DB_USER,
   password: process.env.DBPASS,
