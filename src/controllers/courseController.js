@@ -4,14 +4,20 @@ import { createError } from "../../config/error.js";
 
 import { client } from "../../config/db.js";
 
+// export const getAllCourses = async (req, res, next) => {
+//   const query = `SELECT * FROM Courses;`;
+//   try {
+//     const result = await client.query(query);
+//     res.status(200).json({ data: result.rows });
+//   } catch (error) {
+//     next(createError(500, "Something went wrong"));
+//   }
+// };
+
+
+//test error handling
 export const getAllCourses = async (req, res, next) => {
-  const query = `SELECT * FROM Courses;`;
-  try {
-    const result = await client.query(query);
-    res.status(200).json({ data: result.rows });
-  } catch (error) {
-    res.send(next(createError(500, "Internal server error")));
-  }
+  next(createError(500, "Something went wrong"));
 };
 
 export const getCoursesByName = async (req, res, next) => {
