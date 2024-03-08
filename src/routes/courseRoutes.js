@@ -11,7 +11,7 @@ const courseRouter = express.Router();
 
 courseRouter.get("/", getAllCourses);
 
-courseRouter.get("/:name", getCoursesByName);
+courseRouter.get("/get/name", getCoursesByName);
 
 courseRouter.post("/create", createCourse);
 

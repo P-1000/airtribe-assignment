@@ -7,11 +7,11 @@ const instructorRouter = express.Router();
 export const newInstructor = async (req, res, next) => {
   const { name, email, bio } = req.body;
   if (name === undefined || email === undefined || bio === undefined) {
-    return next(createError(400, "Invalid input"));
+    res.status(400).json({ message: "Invalid input" });
   }
 
   if (name === "" || email === "" || bio === "") {
-    return next(createError(400, "Invalid input"));
+    res.status(400).json({ message: "Invalid input" });
   }
 
   const emailRegex = /\S+@\S+\.\S+/;
@@ -23,7 +23,7 @@ export const newInstructor = async (req, res, next) => {
   const result = await client.query(query, values);
 
   if (result.rows.length > 0) {
-    return next(createError(400, "Email already exists"));
+    return res.status(400).json({ message: "Instructor already exists" });
   }
 
   try {
@@ -48,7 +48,7 @@ export const updateInstructor = async (req, res, next) => {
   try {
     const result = await client.query(query, values);
     if(result.rows.length === 0) {
-      return next(createError(404, "Instructor not found"));
+      res.status(404).json({message: "Instructor not found"});
     }
     const updateQuery = `
       UPDATE Instructors
@@ -98,21 +98,24 @@ export const getInstructorById = async (req, res, next) => {
 }
 
 export const deleteInstructor = async (req, res, next) => {
-    const {id} = req.params;
-    if(id == undefined && id == "") return next(createError(400, "Invalid input"));
-    try {
-        const query = `SELECT 1 FROM Instructors WHERE instructor_id = $1;`;
-        const values = [id];
-        const result = await client.query(query, values);
-        if(result.rows.length === 0) {
-            return next(createError(404, "Instructor not found"));
-        }
-        const deleteQuery = `DELETE FROM Instructors WHERE instructor_id = $1;`;
-        const deleteValues = [id];
-        await client.query(deleteQuery, deleteValues);
-        res.status(204).json({message: "Instructor deleted successfully"});
-    } catch (error) {
-        next(createError());
-    }
+  const { id } = req.params;
+  if (!id) return next(createError(400, "Invalid input"));
+
+  try {
+      const checkQuery = `SELECT 1 FROM Instructors WHERE instructor_id = $1;`;
+      const checkResult = await client.query(checkQuery, [id]);
+
+      if (checkResult.rows.length === 0) {
+          return res.status(404).json({ message: "Instructor not found" });
+      }
+
+      const deleteQuery = `DELETE FROM Instructors WHERE instructor_id = $1;`;
+      await client.query(deleteQuery, [id]);
+
+      res.status(204).json({ message: "Instructor deleted successfully" });
+  } catch (error) {
+      return next(createError(500, "Internal server error"));
+  }
 }
+
 

@@ -4,11 +4,14 @@ import instructorRouter from "./src/routes/instructorRoutes.js";
 import courseRouter from "./src/routes/courseRoutes.js";
 import leadRouter from "./src/routes/leadRoutes.js";
 import { client } from "./config/db.js";
+import { createError } from "./config/error.js";
+import { errorHandler } from "./config/eh.js";
 
 dotenv.config();
 
 const app = new express();
 app.use(express.json());
+// app.use(errorHandler());
 
 //routes :
 app.use("/instructors", instructorRouter);

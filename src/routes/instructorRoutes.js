@@ -3,9 +3,6 @@ import { newInstructor , updateInstructor , getAllInstructors , getInstructorByI
 
 const instructorRouter = express.Router();
 
-instructorRouter.get("/", (req, res) => {
-  res.status(200).json({ message: "Instructors" });
-});
 
 instructorRouter.post("/newInstructor", newInstructor);
 

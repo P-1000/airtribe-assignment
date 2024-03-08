@@ -15,7 +15,7 @@ export const getAllCourses = async (req, res, next) => {
 };
 
 export const getCoursesByName = async (req, res, next) => {
-  const { name } = req.params;
+  const { name } = req.body;
   const query = `SELECT * FROM Courses WHERE similarity(name , $1) > 0.3;`;
   try {
     const fet = await client.query(query, [name]);
@@ -28,6 +28,17 @@ export const getCoursesByName = async (req, res, next) => {
 export const createCourse = async (req, res, next) => {
   const { name, course_description, max_seats, start_date, instructor_id } =
     req.body;
+    const checkQuery = `SELECT * FROM Instructors WHERE instructor_id = $1;`;
+    const checkValues = [instructor_id];
+    try {
+      const checkResult = await client.query(checkQuery, checkValues);
+  
+      if (checkResult.rowCount === 0) {
+        return next(createError(404, "Instructor not found"));
+      }
+    } catch (error) {
+      next(createError(500, "Internal server error"));
+    }
   const query = `INSERT INTO Courses (name , course_description , max_seats, start_date, instructor_id  ) VALUES ($1 , $2 , $3 , $4, $5) RETURNING * ;`;
   const values = [
     name,
@@ -45,6 +56,9 @@ export const createCourse = async (req, res, next) => {
   }
 };
 
+
+
+
 export const updateCourse = async (req, res, next) => {
   const { id } = req.params;
 
@@ -59,7 +73,7 @@ export const updateCourse = async (req, res, next) => {
     const checkResult = await client.query(checkQuery, checkValues);
 
     if (checkResult.rowCount === 0) {
-      return next(createError(404, "Course not found"));
+      res.status(404).json({ message: "Course not found" });
     }
   } catch (error) {
     return next(createError(500, "Internal server error"));
