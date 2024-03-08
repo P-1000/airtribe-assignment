@@ -5,7 +5,7 @@ import courseRouter from "./src/routes/courseRoutes.js";
 import leadRouter from "./src/routes/leadRoutes.js";
 import { client } from "./config/db.js";
 import { createError } from "./config/error.js";
-import { errorHandler } from "./config/eh.js";
+// import { errorHandler } from "./config/eh.js";
 
 dotenv.config();
 

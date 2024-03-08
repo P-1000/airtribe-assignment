@@ -1,9 +1,9 @@
 import { client } from "../../config/db.js";
 import { createError } from "../../config/error.js";
 
-
 export const applyForCourse = async (req, res, next) => {
   const { course_id } = req.params;
+  const { name, email, phone, linkedin_profile } = req.body;
   if (!course_id) {
     res.status(400).json({ error: "Invalid input" });
   }
@@ -65,13 +65,15 @@ export const updateLead = async (req, res, next) => {
     return next(createError(400, "Invalid input"));
   }
 
-  if (status && (status !== "Accepted" && status !== "Rejected")) {
+  if (status && status !== "Accepted" && status !== "Rejected") {
     return next(createError(400, "Invalid status input"));
   }
 
   try {
     const instructorCheckQuery = `SELECT * FROM instructors WHERE instructor_id = $1;`;
-    const instructorCheckRes = await client.query(instructorCheckQuery, [instructor_id]);
+    const instructorCheckRes = await client.query(instructorCheckQuery, [
+      instructor_id,
+    ]);
     if (instructorCheckRes.rows.length === 0) {
       return next(createError(400, "Instructor does not exist"));
     }
@@ -91,6 +93,33 @@ export const updateLead = async (req, res, next) => {
 
   try {
     const statusUpdateQuery = `UPDATE leads SET status = $1 WHERE lead_id = $2 RETURNING *;`;
+    if (status === "Accepted") {
+      const updateLeadCountsQuery = `
+      UPDATE leadcounts
+      SET pending_count = pending_count - 1, accepted_count = accepted_count + 1
+      WHERE course_id = (SELECT course_id FROM leads WHERE lead_id = $1)
+      RETURNING *;
+    `;
+      const updateValues = [lead_id];
+      const updateResult = await client.query(
+        updateLeadCountsQuery,
+        updateValues
+      );
+    }
+    if (status === "Rejected") {
+      const updateLeadCountsQuery = `
+      UPDATE leadcounts
+      SET pending_count = pending_count - 1, rejected_count = rejected_count + 1
+      WHERE course_id = (SELECT course_id FROM leads WHERE lead_id = $1)
+      RETURNING *;
+    `;
+      const updateValues = [lead_id];
+      const updateResult = await client.query(
+        updateLeadCountsQuery,
+        updateValues
+      );
+    }
+
     const values = [status, lead_id];
     const result = await client.query(statusUpdateQuery, values);
     res.status(200).json({ message: "Lead updated successfully" });
@@ -98,7 +127,6 @@ export const updateLead = async (req, res, next) => {
     return next(createError(500, "Failed to update lead"));
   }
 };
-
 
 export const getLeadsByCourse = async (req, res, next) => {
   const { course_id } = req.params;
@@ -156,7 +184,7 @@ export const getLeadByName = async (req, res, next) => {
   try {
     const getLeadsQuery = `SELECT * FROM leads WHERE similarity(name , $1) > 0.3;`;
     const getLeads = await client.query(getLeadsQuery, [name]);
-    res.status(200).json({ leads: getLeads.rows});
+    res.status(200).json({ leads: getLeads.rows });
   } catch (error) {
     next(createError());
   }
@@ -183,7 +211,9 @@ export const addLeadComment = async (req, res, next) => {
   }
   try {
     const checkInstructorQuery = `SELECT * FROM instructors WHERE instructor_id = $1;`;
-    const instructorResult = await client.query(checkInstructorQuery, [instructor_id]);
+    const instructorResult = await client.query(checkInstructorQuery, [
+      instructor_id,
+    ]);
     if (instructorResult.rows.length === 0) {
       return next(createError(404, "Instructor not found"));
     }
@@ -208,7 +238,6 @@ export const addLeadComment = async (req, res, next) => {
     return next(createError(500, "Internal server error"));
   }
 };
-
 
 export const getLeadCommentsByLead = async (req, res, next) => {
   const { lead_id } = req.body;
