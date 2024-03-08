@@ -2,15 +2,6 @@
 
 The backend API for Airtribe, an application for managing online courses. The API is built using Node.js , Express js and PostgreSQL, and it provides endpoints for managing courses, instructors, leads, and more.
 
-## Postman Documentation
-
-Explore the API endpoints and test them using Postman. Access the documentation [here](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).
-
-You can direclty fork the collection from the link and start using the API In postman app or directly from the browser.
-
-No need to enter the endpoints manually and test them.
-
-You can also find the Documentation of each api with the request , response , schema of the response ,example of the response and you can also test the api from the documentation itself.
 
 ## Database Schema
 
@@ -24,6 +15,7 @@ To set up the development environment and run the API locally, follow these step
 
 - Node.js 
 - Docker 
+- Postman
 
 ### Installation
 
@@ -64,6 +56,20 @@ docker build -t app-airtribe .
 ### Environment Variables
 
 already set in the docker-compose.yml file and the .env file so no need to set them manually.
+
+## Postman Documentation
+
+Explore the API endpoints and test them using Postman. Access the documentation [here](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).
+
+### Importing the Collection
+You can direclty fork the collection from the link and start using the API In postman app itself. 
+
+Click on the link and then click on the "Run in Postman" button , select Postman Desktop app and then it will open the postman desktop app and ask you to import the collection , click on the import button and the collection will be imported to your postman app.
+
+No need to enter the endpoints manually and test them , you can directly use the collection and start testing the api endpoints (POSTMAN desktop app is required for this)
+
+You can also find the Documentation of each api (click on view complete documentaion for detailed info ) with the request , response , schema of the response ,example of the response and you can also test the api from the documentation itself.
+
 
 ### Accessing the API
 
