@@ -1,8 +1,10 @@
-export  const errorHandler = (err, req, res, next) => {
-    const status = err.status || 500;
-    const message = err.message || 'Internal Server Error';
-  
-    res.status(status).json({ error: { status, message } });
-  };
-  
-  
+export const errorHand = (err, req,res,next) => {
+    const error = new Error();
+    error.message = err.message;
+    error.statusCode = err.statusCode;
+    error.status = err.status;
+    res.status(error.statusCode).json({
+        status: error.status,
+        message: error.message,
+    });
+}

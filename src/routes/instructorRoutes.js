@@ -3,9 +3,6 @@ import { newInstructor , updateInstructor , getAllInstructors , getInstructorByI
 
 const instructorRouter = express.Router();
 
-instructorRouter.get("/", (req, res) => {
-  res.status(200).json({ message: "Instructors" });
-});
 
 instructorRouter.post("/newInstructor", newInstructor);
 
@@ -15,6 +12,6 @@ instructorRouter.get('/getall',  getAllInstructors);
 
 instructorRouter.get('/id/:id', getInstructorById);
 
-instructorRouter.delete('/delete/:id',deleteInstructor);
+// instructorRouter.delete('/delete/:id',deleteInstructor);
 
 export default instructorRouter;

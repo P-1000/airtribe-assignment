@@ -20,7 +20,7 @@ leadRouter.post("/apply/:course_id", applyForCourse);
 
 leadRouter.patch("/update", updateLead);
 
-leadRouter.get("getLeadByCourse/:course_id", getLeadsByCourse);
+leadRouter.get("/getLeadByCourse/:course_id", getLeadsByCourse);
 
 leadRouter.get("/getLead/:id", getLeadbyId);
 
