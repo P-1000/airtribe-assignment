@@ -59,7 +59,7 @@ already set in the docker-compose.yml file and the .env file so no need to set t
 
 ## Postman Documentation
 
-Explore the API endpoints and test them using Postman. Access the documentation [here](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).
+Explore the API endpoints and test them using Postman. Access the documentation [here](https://documenter.getpostman.com/view/25809155/2sA2xh2sLN).
 
 ### Importing the Collection
 You can direclty fork the collection from the link and start using the API In postman app itself. 
@@ -75,4 +75,7 @@ You can also find the Documentation of each api (click on view complete document
 
 The API will be accessible at `http://localhost:13000`.
 
-For a complete list of endpoints and their usage, visit the documentation endpoint mentioned in the Postman documentation section. [click here for api docs and testing](https://documenter.getpostman.com/view/25809155/2sA2xfZZKZ).
+For a complete list of endpoints and their usage, visit the documentation endpoint mentioned in the Postman documentation section. [click here for api docs and testing](https://documenter.getpostman.com/view/25809155/2sA2xh2sLN).
+
+
+https://documenter.getpostman.com/view/25809155/2sA2xh2sLN : API docs link

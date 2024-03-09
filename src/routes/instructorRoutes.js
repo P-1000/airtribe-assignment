@@ -12,6 +12,6 @@ instructorRouter.get('/getall',  getAllInstructors);
 
 instructorRouter.get('/id/:id', getInstructorById);
 
-instructorRouter.delete('/delete/:id',deleteInstructor);
+// instructorRouter.delete('/delete/:id',deleteInstructor);
 
 export default instructorRouter;

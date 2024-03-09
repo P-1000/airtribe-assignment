@@ -109,7 +109,6 @@ export const deleteInstructor = async (req, res, next) => {
       if (checkResult.rows.length === 0) {
           return next(createError(404, "Instructor not found"));
       }
-
       const deleteQuery = `DELETE FROM Instructors WHERE instructor_id = $1;`;
       await client.query(deleteQuery, [id]);
 

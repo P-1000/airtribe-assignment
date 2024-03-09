@@ -69,9 +69,9 @@ export const createCourse = async (req, res, next) => {
 
     const insertLeadCountsQuery = `
       INSERT INTO leadcounts (course_id, pending_count, accepted_count, rejected_count)
-      VALUES ($1, 0, 0, 0);
+      VALUES ($1, $2, $3, $4);
     `;
-    await client.query(insertLeadCountsQuery, [courseId]);
+    await client.query(insertLeadCountsQuery, [courseId, 0, 0, 0]);
 
     res.status(201).json({ data: insertCourseResult.rows[0] });
   } catch (error) {
