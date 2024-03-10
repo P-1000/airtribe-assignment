@@ -70,6 +70,8 @@ No need to enter the endpoints manually and test them , you can directly use the
 
 You can also find the Documentation of each api (click on view complete documentaion for detailed info ) with the request , response , schema of the response ,example of the response and you can also test the api from the documentation itself.
 
+#### run the create tables endpoint and fakedata enpoint to create the tables and insert the fakedata in the tables.
+you can find these in the postman collection.
 
 ### Accessing the API
 
@@ -79,3 +81,13 @@ For a complete list of endpoints and their usage, visit the documentation endpoi
 
 
 https://documenter.getpostman.com/view/25809155/2sA2xh2sLN : API docs link
+
+
+
+## Technology Stack
+
+#### Node.js: Scalable and efficient JavaScript runtime for server-side applications.
+#### Express.js: Minimalist web framework for building flexible and feature-rich APIs.
+#### PostgreSQL: Reliable open-source relational database with advanced features and compatibility.
+### Database Interaction
+#### pg (node-postgres): Simple, performant library for interacting with PostgreSQL databases from Node.js. Chosen for its ease of use, performance, and support for advanced features like parameterized queries and transactions.

@@ -5,8 +5,8 @@ import courseRouter from "./src/routes/courseRoutes.js";
 import leadRouter from "./src/routes/leadRoutes.js";
 import { client } from "./config/db.js";
 import { createError } from "./config/error.js";
-import {fakerDataRouter} from "./data/fakedataRoute.js";
-import { createTbl } from "./data/createTable.js";
+import { tableInit } from "./data/createTable.js";
+import { LoadData } from "./data/fakedataRoute.js";
 
 dotenv.config();
 
@@ -18,8 +18,6 @@ app.use("/instructors", instructorRouter);
 app.use("/courses", courseRouter);
 app.use("/leads", leadRouter);
 
-app.use("/createTables", createTbl);
-app.use("/fakedata", fakerDataRouter);
 
 app.get("/", (req, res) => {
   res
@@ -38,6 +36,14 @@ app.use((err, req, res, next) => {
 });
 
 
+
+const tableAndData = async () => {
+  await tableInit();
+  await LoadData();
+  console.log("Tables created successfully");
+  console.log("Data loaded successfully");
+};
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   client
@@ -49,4 +55,7 @@ app.listen(process.env.PORT, () => {
       console.log("Error connecting to database");
       createError(err, 500, "error", "Error connecting to database");
     });
+
+    tableAndData();
+
 });

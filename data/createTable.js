@@ -44,7 +44,26 @@ const createLeadCountTable = `CREATE TABLE IF NOT EXISTS leadcounts (
 
 const pg_ext = `CREATE EXTENSION IF NOT EXISTS pg_trgm;`;
 
-  
+export const tableInit = async () => {
+  try {
+    const createInstructorTable = `CREATE TABLE IF NOT EXISTS instructors (
+    instructor_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    bio TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )`;
+    await client.query(createInstructorTable);
+    await client.query(createCourseTable);
+    await client.query(createLeadTable);
+    await client.query(createLeadCommentTable);
+    await client.query(createLeadCountTable);
+    await client.query(pg_ext);
+    console.log("Tables created successfully");
+  } catch (error) {
+    console.error("Error creating tables:", error);
+  }
+};
 
 export const createTbl = async (req, res) => {
   const createInstructorTable = `CREATE TABLE IF NOT EXISTS instructors (

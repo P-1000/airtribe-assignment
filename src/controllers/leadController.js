@@ -1,5 +1,7 @@
 import { client } from "../../config/db.js";
 import { createError } from "../../config/error.js";
+import {queries} from "../../queries/queries.js";
+
 
 export const applyForCourse = async (req, res, next) => {
   const { course_id } = req.params;
@@ -31,25 +33,13 @@ export const applyForCourse = async (req, res, next) => {
     next(createError(500, "Internal server error"));
   }
 
-  const query = `
-  INSERT INTO leads (course_id, name, email, phone, linkedin_profile)
-  VALUES ($1, $2, $3, $4, $5)
-  RETURNING *;
-`;
 
-  const values = [course_id, name, email, phone, linkedin_profile];
 
   try {
-    const result = await client.query(query, values);
-    const updateQuery = `
-    UPDATE leadcounts
-    SET pending_count = pending_count + 1
-    WHERE course_id = $1
-    RETURNING pending_count;
-  `;
+    const result = await client.query(queries.putLead, values);
 
     const updateValues = [course_id];
-    const updateResult = await client.query(updateQuery, updateValues);
+    const updateResult = await client.query(queries.updateLeadCount, updateValues);
     res.status(201).json({ message: "Application submitted successfully" });
   } catch (error) {
     next(createError(500, "Internal server error"));
@@ -68,8 +58,7 @@ export const updateLead = async (req, res, next) => {
   }
 
   try {
-    const instructorCheckQuery = `SELECT * FROM instructors WHERE instructor_id = $1;`;
-    const instructorCheckRes = await client.query(instructorCheckQuery, [
+    const instructorCheckRes = await client.query(queries.getInstructorById, [
       instructor_id,
     ]);
     if (instructorCheckRes.rows.length === 0) {
@@ -80,8 +69,7 @@ export const updateLead = async (req, res, next) => {
   }
 
   try {
-    const leadCheckQuery = `SELECT * FROM leads WHERE lead_id = $1;`;
-    const leadCheckRes = await client.query(leadCheckQuery, [lead_id]);
+    const leadCheckRes = await client.query(queries.getLeadById, [lead_id]);
     if (leadCheckRes.rows.length === 0) {
       res.status(400).json({ error: "Lead does not exist" });
     }
@@ -166,8 +154,7 @@ export const getLeadbyId = async (req, res, next) => {
     return next(createError(400, "Invalid input"));
   }
   try {
-    const getLeadsQuery = `SELECT * FROM leads WHERE lead_id = $1;`;
-    const getLeads = await client.query(getLeadsQuery, [id]);
+    const getLeads = await client.query(queries.getLeadById, [id]);
     if (getLeads.rows.length === 0) {
       res.status(404).json({ error: "Lead does not exist" });
     }
@@ -208,8 +195,7 @@ export const addLeadComment = async (req, res, next) => {
     return next(createError(400, "Invalid input"));
   }
   try {
-    const checkInstructorQuery = `SELECT * FROM instructors WHERE instructor_id = $1;`;
-    const instructorResult = await client.query(checkInstructorQuery, [
+    const instructorResult = await client.query(queries.getInstructorById, [
       instructor_id,
     ]);
     if (instructorResult.rows.length === 0) {
@@ -219,8 +205,7 @@ export const addLeadComment = async (req, res, next) => {
     return next(createError(500, "Internal server error"));
   }
   try {
-    const checkLeadQuery = `SELECT * FROM leads WHERE lead_id = $1;`;
-    const leadResult = await client.query(checkLeadQuery, [lead_id]);
+    const leadResult = await client.query(queries.getLeadById, [lead_id]);
     if (leadResult.rows.length === 0) {
       return next(createError(404, "Lead not found"));
     }
@@ -243,8 +228,7 @@ export const getLeadCommentsByLead = async (req, res, next) => {
     return next(createError(400, "Invalid input"));
   }
   try {
-    const checkQuery = `SELECT * FROM leads WHERE lead_id = $1;`;
-    const checkres = await client.query(checkQuery, [lead_id]);
+    const checkres = await client.query(queries.getLeadById, [lead_id]);
     if (checkres.rows.length === 0) {
       return next(createError(400, "Lead does not exist"));
     }
