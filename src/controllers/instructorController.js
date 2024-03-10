@@ -5,6 +5,7 @@ import {queries} from "../../queries/queries.js";
 
 const instructorRouter = express.Router();
 
+// create new instructor
 export const newInstructor = async (req, res, next) => {
   const { name, email, bio } = req.body;
   if (name === undefined || email === undefined || bio === undefined) {
@@ -36,6 +37,7 @@ export const newInstructor = async (req, res, next) => {
   }
 };
 
+// update instructor
 export const updateInstructor = async (req, res, next) => {
   const { id } = req.params;
   const { name, email, bio } = req.body;
@@ -60,6 +62,7 @@ export const updateInstructor = async (req, res, next) => {
 };
 
 
+// get all instructors
 export const getAllInstructors = async (req, res, next) => {
     try {
         const result = await client.query(queries.getAllInstructors);
@@ -70,7 +73,7 @@ export const getAllInstructors = async (req, res, next) => {
     }
 }
 
-
+// get instructor by id 
 export const getInstructorById = async (req, res, next) => {
     try {
         const {id} = req.params;
@@ -87,6 +90,7 @@ export const getInstructorById = async (req, res, next) => {
     }
 }
 
+// delete instructor
 export const deleteInstructor = async (req, res, next) => {
   const { id } = req.params;
   if (!id) return next(createError(400, "Invalid input"));

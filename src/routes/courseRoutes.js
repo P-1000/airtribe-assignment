@@ -23,5 +23,4 @@ courseRouter.get("/get/courseDetails", getCourseDetails);
 courseRouter.get("/get/fullDetails/:course_id", getFullCourseDetails);
 
 
-
 export default courseRouter;

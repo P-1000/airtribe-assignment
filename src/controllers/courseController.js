@@ -4,6 +4,8 @@ import { createError } from "../../config/error.js";
 import {body , validationResult} from "express-validator";
 import { client } from "../../config/db.js";
 
+
+// Get all courses
 export const getAllCourses = async (req, res, next) => {
   try {
     const result = await client.query(queries.getAllCourses);
@@ -13,6 +15,7 @@ export const getAllCourses = async (req, res, next) => {
   }
 };
 
+// get course by name 
 export const getCoursesByName = async (req, res, next) => {
   const validation = [
     body('name').isString().notEmpty().withMessage('Name must be a non-empty')
@@ -31,50 +34,32 @@ export const getCoursesByName = async (req, res, next) => {
   }
 };
 
+// Get all courses by instructor id
 export const createCourse = async (req, res, next) => {
-  const validation = [
-    body('name').isString().notEmpty().withMessage('Name must be a non-empty'),
-    body('course_description').isString().notEmpty().withMessage('Course description must be a non-empty'),
-    body('max_seats').isNumeric().notEmpty().withMessage('Max seats must be a non-empty'),
-    body('start_date').isDate().notEmpty().withMessage('Start date must be a non-empty'),
-    body('instructor_id').isNumeric().notEmpty().withMessage('Instructor id must be a non-empty')
-  ];
-
   const { name, course_description, max_seats, start_date, instructor_id } = req.body;
 
-  if (!name || !course_description || !max_seats || !start_date || !instructor_id) {
-    return next(createError(400, "All fields are required"));
-  }
-  const checkValues = [instructor_id];
   try {
-    const checkResult = await client.query(queries.getInstructorById, checkValues);
+    await client.query('BEGIN'); // Transaction starts
+
+    const checkResult = await client.query(queries.getInstructorById, [instructor_id]);
     if (checkResult.rowCount === 0) {
+      await client.query('ROLLBACK'); 
       return next(createError(404, "Instructor not found"));
     }
-  } catch (error) {
-    return next(createError(500, "Internal server error"));
-  }
-  const insertCourseValues = [
-    name,
-    course_description,
-    max_seats,
-    start_date,
-    instructor_id,
-  ];
-  try {
-    const insertCourseResult = await client.query(
-      queries.createCourse,
-      insertCourseValues
-    );
+    const insertCourseResult = await client.query(queries.createCourse, [name, course_description, max_seats, start_date, instructor_id]);
     const courseId = insertCourseResult.rows[0].course_id;
     await client.query(queries.putLeadCount, [courseId, 0, 0, 0]);
 
+    await client.query('COMMIT');  // Transaction ends
     res.status(201).json({ data: insertCourseResult.rows[0] });
   } catch (error) {
+    await client.query('ROLLBACK'); 
     return next(createError(500, "Internal server error"));
+  } finally {
   }
 };
 
+// Update course Details 
 export const updateCourse = async (req, res, next) => {
   const { id } = req.params;
 
@@ -112,35 +97,7 @@ export const updateCourse = async (req, res, next) => {
   }
 };
 
-export const deleteCourse = async (req, res, next) => {
-  const { id } = req.params;
 
-  if (isNaN(id)) {
-    return next(createError(400, "Invalid course id"));
-  }
-
-  const checkValues = [id];
-
-  try {
-    const checkResult = await client.query(queries.getCourseById, checkValues);
-
-    if (checkResult.rowCount === 0) {
-      return next(createError(404, "Course not found"));
-    }
-  } catch (error) {
-    return next(createError(500, "Internal server error"));
-  }
-
-  const deleteQuery = `DELETE FROM Courses WHERE course_id = $1;`;
-  const deleteValues = [id];
-
-  try {
-    await client.query(deleteQuery, deleteValues);
-    res.status(200).json({ message: "Course deleted successfully" });
-  } catch (error) {
-    return next(createError(500, "Internal server error"));
-  }
-};
 
 export const getCourseDetails = async (req, res, next) => {
   const { course_id } = req.body;
@@ -155,6 +112,8 @@ export const getCourseDetails = async (req, res, next) => {
   }
 };
 
+
+//Get full course details : including instructor details, course details, and course lead stats
 export const getFullCourseDetails = async (req, res, next) => {
   try {
     const { course_id } = req.params;
