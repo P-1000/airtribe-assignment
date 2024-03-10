@@ -81,3 +81,13 @@ For a complete list of endpoints and their usage, visit the documentation endpoi
 
 
 https://documenter.getpostman.com/view/25809155/2sA2xh2sLN : API docs link
+
+
+
+## Technology Stack
+
+#### Node.js: Scalable and efficient JavaScript runtime for server-side applications.
+#### Express.js: Minimalist web framework for building flexible and feature-rich APIs.
+#### PostgreSQL: Reliable open-source relational database with advanced features and compatibility.
+### Database Interaction
+#### pg (node-postgres): Simple, performant library for interacting with PostgreSQL databases from Node.js. Chosen for its ease of use, performance, and support for advanced features like parameterized queries and transactions.
