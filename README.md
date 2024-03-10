@@ -15,7 +15,7 @@ To set up the development environment and run the API locally, follow these step
 
 - Node.js 
 - Docker 
-- Postman
+- Postman [click here to acces api docs](https://documenter.getpostman.com/view/25809155/2sA2xh2sLN).
 
 ### Installation
 
