@@ -26,7 +26,7 @@ leadRouter.get("/getLead/:id", getLeadbyId);
 
 leadRouter.get("/getLeadByName/:name", getLeadByName);
 
-leadRouter.get("/getLeadByEmail", getLeadByEmail);
+leadRouter.get("/getLeadByEmail/:email", getLeadByEmail);
 
 leadRouter.post("/add/leadcomments", addLeadComment);
 

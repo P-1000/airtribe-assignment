@@ -12,13 +12,13 @@ const courseRouter = express.Router();
 
 courseRouter.get("/", getAllCourses);
 
-courseRouter.get("/get/name", getCoursesByName);
+courseRouter.get("/get/name/:name", getCoursesByName);
 
 courseRouter.post("/create", createCourse);
 
 courseRouter.put("/update/:id", updateCourse);
 
-courseRouter.get("/get/courseDetails", getCourseDetails);
+courseRouter.get("/get/courseDetails/:course_id", getCourseDetails);
 
 courseRouter.get("/get/fullDetails/:course_id", getFullCourseDetails);
 
