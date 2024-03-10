@@ -17,15 +17,8 @@ export const getAllCourses = async (req, res, next) => {
 
 // get course by name 
 export const getCoursesByName = async (req, res, next) => {
-  const validation = [
-    body('name').isString().notEmpty().withMessage('Name must be a non-empty')
-  ];
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(createError(400, errors.array().map(error => error.msg).join(', ')));
-  }
-
-  const { name } = req.body;
+  const { name } = req.params;
+  if(name === undefined || name === "") return next(createError(400, "Invalid input"));
   try {
     const result = await client.query(queries.getCourseByName, [name]);
     res.status(200).json({ data: result.rows });
@@ -98,10 +91,9 @@ export const updateCourse = async (req, res, next) => {
 };
 
 
-
+// get course details 
 export const getCourseDetails = async (req, res, next) => {
-  const { course_id } = req.body;
-
+  const { course_id } = req.params;
   if (!course_id)  return next(createError(400, "Course ID is required"));
   const values = [course_id];
   try {

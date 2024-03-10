@@ -176,7 +176,7 @@ export const getLeadByName = async (req, res, next) => {
 };
 
 export const getLeadByEmail = async (req, res, next) => {
-  const { email } = req.body;
+  const { email } = req.params;
   if (!email) {
     return next(createError(400, "Invalid input"));
   }
