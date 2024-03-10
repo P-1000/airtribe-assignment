@@ -1,7 +1,7 @@
 import express from "express";
 import {queries} from "../../queries/queries.js";
 import { createError } from "../../config/error.js";
-
+import {validationResult} from "express-validator";
 import { client } from "../../config/db.js";
 
 export const getAllCourses = async (req, res, next) => {
@@ -27,8 +27,12 @@ export const getCoursesByName = async (req, res, next) => {
 };
 
 export const createCourse = async (req, res, next) => {
+
+
   const { name, course_description, max_seats, start_date, instructor_id } =
     req.body;
+
+
 
   if (!name || !course_description || !max_seats || !start_date || !instructor_id) {
     return next(createError(400, "All fields are required"));
