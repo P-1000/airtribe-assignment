@@ -91,3 +91,7 @@ https://documenter.getpostman.com/view/25809155/2sA2xh2sLN : API docs link
 #### PostgreSQL: Reliable open-source relational database with advanced features and compatibility.
 ### Database Interaction
 #### pg (node-postgres): Simple, performant library for interacting with PostgreSQL databases from Node.js. Chosen for its ease of use, performance, and support for advanced features like parameterized queries and transactions.
+
+
+
+###### Feel free to reach out if you have any questions or need assistance with setting up the project, running the API, or anything else related to the project
