@@ -40,6 +40,8 @@ app.use((err, req, res, next) => {
 const tableAndData = async () => {
   await tableInit();
   await LoadData();
+  console.log("Tables created successfully");
+  console.log("Data loaded successfully");
 };
 
 app.listen(process.env.PORT, () => {

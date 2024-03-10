@@ -1,7 +1,7 @@
 import express from "express";
 import {queries} from "../../queries/queries.js";
 import { createError } from "../../config/error.js";
-import {validationResult} from "express-validator";
+import {body , validationResult} from "express-validator";
 import { client } from "../../config/db.js";
 
 export const getAllCourses = async (req, res, next) => {
@@ -14,25 +14,33 @@ export const getAllCourses = async (req, res, next) => {
 };
 
 export const getCoursesByName = async (req, res, next) => {
-  const { name } = req.body;
-  if (!name) {
-    return next(createError(400, "Name is required"));
+  const validation = [
+    body('name').isString().notEmpty().withMessage('Name must be a non-empty')
+  ];
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createError(400, errors.array().map(error => error.msg).join(', ')));
   }
+
+  const { name } = req.body;
   try {
-    const fet = await client.query(queries.getCourseByName, [name]);
-    res.status(200).json({ data: fet.rows });
+    const result = await client.query(queries.getCourseByName, [name]);
+    res.status(200).json({ data: result.rows });
   } catch (error) {
-    next(createError(500, "Something went wrong"));
+    next(createError(500, 'Something went wrong'));
   }
 };
 
 export const createCourse = async (req, res, next) => {
+  const validation = [
+    body('name').isString().notEmpty().withMessage('Name must be a non-empty'),
+    body('course_description').isString().notEmpty().withMessage('Course description must be a non-empty'),
+    body('max_seats').isNumeric().notEmpty().withMessage('Max seats must be a non-empty'),
+    body('start_date').isDate().notEmpty().withMessage('Start date must be a non-empty'),
+    body('instructor_id').isNumeric().notEmpty().withMessage('Instructor id must be a non-empty')
+  ];
 
-
-  const { name, course_description, max_seats, start_date, instructor_id } =
-    req.body;
-
-
+  const { name, course_description, max_seats, start_date, instructor_id } = req.body;
 
   if (!name || !course_description || !max_seats || !start_date || !instructor_id) {
     return next(createError(400, "All fields are required"));

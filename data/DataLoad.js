@@ -14,7 +14,6 @@ export const instructor_data = async () => {
             `;
       const instructorValues = [name, email, bio];
       await client.query(insertInstructorQuery, instructorValues);
-      console.log("Instructor added" , instructorValues);
     }
   } catch (error) {
     createError(error, "instructor_data");
@@ -49,7 +48,6 @@ export const course_data = async () => {
         const courseResult = await client.query(insertCourseQuery, courseValues);
         const courseId = courseResult.rows[0].course_id;
   
-        // Insert into leadcounts table
         const insertLeadCountQuery = `
           INSERT INTO leadcounts (course_id, pending_count, rejected_count, accepted_count)
           VALUES ($1, 0, 0, 0)
@@ -57,7 +55,6 @@ export const course_data = async () => {
         const leadCountValues = [courseId];
         await client.query(insertLeadCountQuery, leadCountValues);
   
-        console.log("Course and leadcounts added", courseName);
       }
     } catch (error) {
       createError(error, "course_data");
@@ -81,7 +78,6 @@ export const lead_data = async () => {
             `;
       const leadValues = [name, email, courseId, phone, linkedinProfile];
       await client.query(insertLeadQuery, leadValues);
-        console.log("Lead added" , leadValues);
     }
   } catch (error) {
     createError(error, "lead_data");

@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+
+COPY node_modules ./node_modules
 
 COPY . .
 
-EXPOSE 3030
+EXPOSE 3000
 
 CMD ["npm", "start"]
